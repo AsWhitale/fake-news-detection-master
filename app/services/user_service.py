@@ -1,18 +1,20 @@
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
+from sqlalchemy.exc import IntegrityError
 
 from app.models.user import User
 from app.schemas.user import UserCreate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
+
 
 class UserService:
     @staticmethod
