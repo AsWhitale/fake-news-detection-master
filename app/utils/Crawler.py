@@ -1,12 +1,14 @@
 import urllib.request
-from bs4 import BeautifulSoup
 from urllib.request import Request
+
+from bs4 import BeautifulSoup
 
 
 def get_web_text(url):
     try:
 
-        header = {'User-Agent':'Mozilla / 5.0(WindowsNT10.0;Win64;x64) AppleWebKit / 537.36(KHTML, likeGecko) Chrome / 134.0.0.0Safari / 537.36Edg / 134.0.0.0'}
+        header = {
+            'User-Agent': 'Mozilla / 5.0(WindowsNT10.0;Win64;x64) AppleWebKit / 537.36(KHTML, likeGecko) Chrome / 134.0.0.0Safari / 537.36Edg / 134.0.0.0'}
         ret = Request(url, headers=header)
         # 发送 HTTP 请求并获取响应
         response = urllib.request.urlopen(ret)
