@@ -7,9 +7,10 @@ from fastapi import HTTPException, status, Depends
 from passlib.context import CryptContext
 from sqlalchemy.exc import IntegrityError
 
-from app.exception.exceptions import DuplicateEmailError, DuplicateUsernameError
+from app.exceptions.user_exceptions import DuplicateEmailError, DuplicateUsernameError, NonexistentUsernameError, \
+    WrongPasswordError
 from app.models.user import User
-from app.schemas.auth import UserCreate
+from app.schemas.user import UserCreate
 from app.schemas.response import success_response
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -51,8 +52,9 @@ class UserService:
             self.db.rollback()
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="用户名或邮箱已经存在"
-            )
+                detail="注册信息冲突"
+            ) from IntegrityError
+
         return success_response(
             data = {
                 "id": db_user.id,
@@ -61,10 +63,17 @@ class UserService:
             }
         )
 
-    async def authenticate_user(self,username: str, password: str):
+
+    async def authenticate_user(self, username: str, password: str):
         user = self.db.query(User).filter(User.username == username).first()
         if not user:
-            return None
+            raise NonexistentUsernameError(username)
         if not verify_password(password, user.hashed_password):
-            return None
-        return user
+            raise WrongPasswordError(username)
+        return success_response(
+            data={
+                "id": user.id,
+                "username": user.username,
+                "email": user.email
+            }
+        )

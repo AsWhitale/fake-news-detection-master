@@ -25,7 +25,7 @@ router = APIRouter(default_response_class=JSONResponse)
 
 def success_response(
     data: any = None,
-    message: str = "Success",
+    message: str = "success",
     status_code: int = status.HTTP_200_OK
 ):
     return {

@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.api import auth_controller, history_controller
+from app.api import user_controller, history_controller
 from app.api import news_controller
 from fastapi.openapi.docs import (
     get_redoc_html,
@@ -14,7 +14,7 @@ from fastapi.openapi.docs import (
     get_swagger_ui_oauth2_redirect_html,
 )
 
-from app.exception.exceptions import AppException
+from app.exceptions.base_exceptions import AppException
 from app.schemas.response import error_response
 
 app = FastAPI()
@@ -58,7 +58,7 @@ app.add_middleware(
     allow_headers=["*"],  # 允许所有头部
 )
 
-app.include_router(auth_controller.router, prefix="/auth")
+app.include_router(user_controller.router, prefix="/auth")
 app.include_router(news_controller.router, prefix="/analyze")
 app.include_router(history_controller.router, prefix="/history")
 
