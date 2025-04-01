@@ -1,25 +1,22 @@
-import os
 from urllib.request import Request
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
-from app.api import user_controller, history_controller
 from app.api import news_controller
-from fastapi.openapi.docs import (
-    get_redoc_html,
-    get_swagger_ui_html,
-    get_swagger_ui_oauth2_redirect_html,
-)
-
+from app.api import user_controller, history_controller
 from app.exceptions.base_exceptions import AppException
 from app.schemas.response import error_response
 
+# from fastapi.openapi.docs import (
+#     get_redoc_html,
+#     get_swagger_ui_html,
+#     get_swagger_ui_oauth2_redirect_html,
+# )
+
 app = FastAPI()
 # app = FastAPI(docs_url=None, redoc_url=None)
-
 
 
 # static_dir = os.path.dirname(os.path.abspath(__file__))
@@ -72,9 +69,11 @@ async def handle_app_exception(request: Request, exc: AppException):
         details=exc.details
     )
 
+
 @app.get("/")
 async def root():
     return {"message": "系统已启动"}
+
 
 # # 重写 openapi 方法以指定 OpenAPI 版本
 # def custom_openapi():

@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from typing import Optional, List
+
+from pydantic import BaseModel
 
 
 # // 请求示例
@@ -12,22 +13,32 @@ from typing import Optional, List
 #   }
 # }
 class NewsItem(BaseModel):
-    news_id: Optional[str] = None
     publish_time: Optional[str] = None
-    platform: Optional[List[str]] = None
+    platform: Optional[str] = None
     url: Optional[str] = None
     title: Optional[str] = None
     content: Optional[str] = None
     pic_url: Optional[List[str]] = None
     hashtag: Optional[List[str]] = None
 
+
 class AnalysisRequestUrl(BaseModel):
     model: str
     url: Optional[str] = None
+
 
 class AnalysisRequestItem(BaseModel):
     model: str
     form_data: Optional[NewsItem] = None
 
+
 class AnalysisRequestFile(BaseModel):
     model: str
+
+
+class NewsAnalysisResult(BaseModel):
+    news_id: int
+    title: str
+    pred_label: str
+    pred_prob: float
+    analysis_time: float

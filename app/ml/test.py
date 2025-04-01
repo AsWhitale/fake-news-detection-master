@@ -2,15 +2,18 @@ import time
 
 import joblib
 import pandas as pd
-from preprocessing import tokenize
+
+from app.utils.preprocessing import tokenize
 
 loaded = joblib.load('models/news_classifier.pkl')
+
 
 def predict_news(text):
     processed = tokenize(text)
     features = loaded['vectorizer'].transform([processed])
     proba = loaded['model'].predict_proba(features)[0]
     return f"真实概率：{proba[0]:.2%}，虚假概率：{proba[1]:.2%}"
+
 
 def predict_test_news():
     column_names = ['news_id', 'label', 'title']
@@ -36,10 +39,12 @@ def predict_test_news():
     else:
         print("无真实标签，仅输出预测结果")
 
+
 # print(predict_news("某地发现神秘病毒已致多人死亡"))  # 示例测试
 
-start_time = time.time()
-predict_test_news()
-end_time = time.time()
-run_time = end_time - start_time
-print(f"函数运行时间: {run_time} 秒")
+if __name__ == '__main__':
+    start_time = time.time()
+    predict_test_news()
+    end_time = time.time()
+    run_time = end_time - start_time
+    print(f"函数运行时间: {run_time} 秒")

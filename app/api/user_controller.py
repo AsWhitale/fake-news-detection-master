@@ -13,11 +13,9 @@ router = APIRouter(tags=["authentication"])
 
 @router.post("/register", response_model=BaseResponse)
 async def register(user: UserCreate, user_service: UserService = Depends()):
-    result = await user_service.create_user(user)
-    return result
+    return await user_service.create_user(user)
 
 
 @router.post("/login", response_model=BaseResponse)
 async def login(login_data: UserLogin, user_service: UserService = Depends()):
-    result = await user_service.authenticate_user(login_data.username, login_data.password)
-    return result
+    return await user_service.authenticate_user(login_data.username, login_data.password)

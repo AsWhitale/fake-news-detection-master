@@ -1,17 +1,16 @@
-import time
-
 from typing import Annotated
-from sqlalchemy.orm import Session
-from app.database import get_db
+
 from fastapi import HTTPException, status, Depends
 from passlib.context import CryptContext
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
+from app.database import get_db
 from app.exceptions.user_exceptions import DuplicateEmailError, DuplicateUsernameError, NonexistentUsernameError, \
     WrongPasswordError
 from app.models.user import User
-from app.schemas.user import UserCreate
 from app.schemas.response import success_response
+from app.schemas.user import UserCreate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -27,7 +26,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 class UserService:
     def __init__(self, db: Annotated[Session, Depends(get_db)]):
         self.db = db
-
 
     async def create_user(self, user: UserCreate):
         # 检查邮箱是否已存在
@@ -56,13 +54,12 @@ class UserService:
             ) from IntegrityError
 
         return success_response(
-            data = {
+            data={
                 "id": db_user.id,
                 "username": db_user.username,
                 "email": db_user.email
             }
         )
-
 
     async def authenticate_user(self, username: str, password: str):
         user = self.db.query(User).filter(User.username == username).first()

@@ -38,7 +38,8 @@ def get_web_text(url):
 
 
 # 示例调用
-url = "https://book.douban.com/subject/1728816/"  # 替换为你要爬取的实际 URL
-text = get_web_text(url)
-if text:
-    print(text)
+if __name__ == '__main__':
+    url = "https://book.douban.com/subject/1728816/"  # 替换为你要爬取的实际 URL
+    text = get_web_text(url)
+    if text:
+        print(text)
