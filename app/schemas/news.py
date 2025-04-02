@@ -38,7 +38,7 @@ class AnalysisRequestFile(BaseModel):
 
 class NewsAnalysisResult(BaseModel):
     news_id: int
-    title: str
     pred_label: str
     pred_prob: float
+    detail: Optional[str] = None
     analysis_time: float

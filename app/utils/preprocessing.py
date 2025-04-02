@@ -25,11 +25,21 @@ def train_preprocess_column(data):
 
 # 训练时对列进行特征处理
 def preprocess_column(data):
-    data['title'] = data['title'].fillna('').apply(tokenize)
-    data['content'] = data['content'].fillna('').apply(tokenize)
+
+    columns_to_process = ['title', 'content']
+    for col in columns_to_process:
+        if col in data.columns:
+            data[col] = data[col].fillna('').apply(tokenize)
 
     # 合并标题和内容
-    data['text'] = data['title'].fillna('').astype(str) + " " + data['content'].fillna('').astype(str)
+    if 'title' in data.columns and 'content' in data.columns:
+        data['text'] = data['title'].fillna('').astype(str) + " " + data['content'].fillna('').astype(str)
+    elif 'title' in data.columns:
+        data['text'] = data['title'].fillna('').astype(str)
+    elif 'content' in data.columns:
+        data['text'] = data['content'].fillna('').astype(str)
+    else:
+        data['text'] = ''
 
     return data
 
@@ -58,7 +68,8 @@ def train_preprocess(data):
 
 # 应用时预处理
 def preprocess(data):
-    data = preprocess_url(data)
+    if 'url' in data.columns:
+        data = preprocess_url(data)
     data = preprocess_column(data)
     return data
 
