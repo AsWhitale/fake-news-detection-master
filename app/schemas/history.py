@@ -1,12 +1,14 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, ConfigDict
 
 
 class HistoryQuery(BaseModel):
     page: int
     page_size: int
 
-class UserLogin(BaseModel):
-    username: str
-    password: str
+
+class HistoryQueryFilter(BaseModel):
+    page: int
+    page_size: int
+    filter: str
 
     model_config = ConfigDict(from_attributes=True)

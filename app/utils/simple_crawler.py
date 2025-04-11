@@ -1,6 +1,6 @@
 import os
-import urllib.request
 import urllib.error
+import urllib.request
 from urllib.parse import urlparse
 
 output_dir = 'output'
@@ -24,7 +24,7 @@ for url in urls:
         content = content.decode(encoding)
 
         parsed_url = urlparse(url)
-        file_name = os.path.join(output_dir, f"{parsed_url.netloc}.txt") #域名命名文件
+        file_name = os.path.join(output_dir, f"{parsed_url.netloc}.txt")  # 域名命名文件
 
         with open(file_name, 'w', encoding='utf-8') as f:
             f.write(content)

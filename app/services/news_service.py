@@ -1,23 +1,30 @@
 import tempfile
+from typing import Annotated
+
+import tempfile
+from typing import Annotated
 
 import pandas as pd
-from fastapi import UploadFile, HTTPException
+from fastapi import UploadFile, Depends
+from sqlalchemy.orm import Session
 
+from app.database import get_db
 from app.exceptions.base_exceptions import AppException
 from app.schemas.news import NewsItem
-from app.schemas.response import success_response
 from app.utils.model_analyzer import analyze_news
 from app.utils.preprocessing import preprocess
 
 
 class NewsService:
-    async def easy_analyze(self,model:str, df: pd.DataFrame):
+    def __init__(self, db: Annotated[Session, Depends(get_db)]):
+        self.db = db
+
+    async def easy_analyze(self, model: str, df: pd.DataFrame):
         # 预处理
         df = preprocess(df)
         # 分析
         result = await analyze_news(model, df)
         return result
-
 
     async def analyze_url(self, model: str, url: str):
         columns = list(NewsItem.model_fields.keys())  # 自动获取所有字段

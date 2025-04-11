@@ -3,15 +3,6 @@ from typing import Optional, List
 from pydantic import BaseModel
 
 
-# // 请求示例
-# {
-#   "data_type": "form",
-#   "form_data": {
-#     "title": "示例新闻",
-#     "platform": ["wechat", "weibo"],
-#     "publish_time": "2023-07-20 10:00:00"
-#   }
-# }
 class NewsItem(BaseModel):
     publish_time: Optional[str] = None
     platform: Optional[str] = None
@@ -22,23 +13,36 @@ class NewsItem(BaseModel):
     hashtag: Optional[List[str]] = None
 
 
-class AnalysisRequestUrl(BaseModel):
-    model: str
-    url: Optional[str] = None
-
-
-class AnalysisRequestItem(BaseModel):
-    model: str
-    form_data: Optional[NewsItem] = None
-
-
-class AnalysisRequestFile(BaseModel):
-    model: str
+class NewsAnalysisDetail(BaseModel):
+    explanation: str
+    marked_text: str
+    fake_ratio: float  # 应该为浮点数类型
+    fake_distribution: list[float]  #虚假内容分布
+    keywords: list[str]  # 应该为字符串列表
+    contributions: str
 
 
 class NewsAnalysisResult(BaseModel):
     news_id: int
     pred_label: str
     pred_prob: float
-    detail: Optional[str] = None
+    detail: NewsAnalysisDetail
     analysis_time: float
+
+
+class AnalysisUrlRequest(BaseModel):
+    model: str
+    url: Optional[str] = None
+
+
+class AnalysisItemRequest(BaseModel):
+    model: str
+    form_data: Optional[NewsItem] = None
+
+
+class AnalysisFileRequest(BaseModel):
+    model: str
+
+
+class DownloadRequest(BaseModel):
+    text_id: int

@@ -1,10 +1,11 @@
-from pydantic import BaseModel
-from typing import Generic, TypeVar, Optional
 import time
+from typing import Generic, TypeVar, Optional
 
+from pydantic import BaseModel
 from starlette.responses import JSONResponse
 
 T = TypeVar('T')
+
 
 class BaseResponse(BaseModel, Generic[T]):
     status: int
@@ -12,21 +13,25 @@ class BaseResponse(BaseModel, Generic[T]):
     data: Optional[T] = None
     timestamp: int = int(time.time())
 
+
 class ErrorDetail(BaseModel):
     code: str  # 业务错误码 (如 "AUTH_FAILED")
     details: Optional[dict] = None
 
+
 class ErrorResponse(BaseResponse[None]):
     error: ErrorDetail
+
 
 from fastapi import APIRouter, status
 
 router = APIRouter(default_response_class=JSONResponse)
 
+
 def success_response(
-    data: any = None,
-    message: str = "success",
-    status_code: int = status.HTTP_200_OK
+        data: any = None,
+        message: str = "success",
+        status_code: int = status.HTTP_200_OK
 ):
     return {
         "status": status_code,
@@ -35,11 +40,12 @@ def success_response(
         "timestamp": int(time.time())
     }
 
+
 def error_response(
-    message: str,
-    error_code: str,
-    status_code: int = 400,
-    details: dict = None
+        message: str,
+        error_code: str,
+        status_code: int = 400,
+        details: dict = None
 ):
     return JSONResponse(
         status_code=status_code,

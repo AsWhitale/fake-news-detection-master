@@ -1,11 +1,7 @@
-from typing import Annotated
+from fastapi import APIRouter, Depends
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.schemas.user import UserCreate, UserLogin
 from app.schemas.response import BaseResponse
+from app.schemas.user import UserCreate, UserLogin
 from app.services.user_service import UserService
 
 router = APIRouter(tags=["authentication"])
